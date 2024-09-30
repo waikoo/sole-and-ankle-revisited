@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-import { WEIGHTS } from '../../constants';
+import { QUERIES, WEIGHTS } from '../../constants';
 
 import Breadcrumbs from '../Breadcrumbs';
 import Select from '../Select';
@@ -10,6 +10,11 @@ import ShoeSidebar from '../ShoeSidebar';
 import ShoeGrid from '../ShoeGrid';
 
 const ShoeIndex = ({ sortId, setSortId }) => {
+  const isPhoneAndDown = window.matchMedia(QUERIES.phoneAndDown).matches
+  const isTabletAndDown = window.matchMedia(QUERIES.tabletAndDown).matches
+  //
+  const spacerSize = isPhoneAndDown ? 0 : isTabletAndDown ? 16 : 32
+  const spacerSize2 = isPhoneAndDown ? 32 : isTabletAndDown ? 16 : 42
   return (
     <Wrapper>
       <MainColumn>
@@ -24,9 +29,10 @@ const ShoeIndex = ({ sortId, setSortId }) => {
             <option value="price">Price</option>
           </Select>
         </Header>
-        <Spacer size={32} />
+        <Spacer size={spacerSize2} />
         <ShoeGrid />
       </MainColumn>
+
       <LeftColumn>
         <Breadcrumbs>
           <Breadcrumbs.Crumb href="/">Home</Breadcrumbs.Crumb>
@@ -35,7 +41,7 @@ const ShoeIndex = ({ sortId, setSortId }) => {
             Shoes
           </Breadcrumbs.Crumb>
         </Breadcrumbs>
-        <Spacer size={42} />
+        <Spacer size={spacerSize} />
         <ShoeSidebar />
       </LeftColumn>
     </Wrapper>
@@ -47,10 +53,21 @@ const Wrapper = styled.div`
   flex-direction: row-reverse;
   align-items: baseline;
   gap: 32px;
+
+  @media (${QUERIES.tabletAndDown}) {
+    flex-direction: column-reverse;
+    gap: 0;
+  }
 `;
 
 const LeftColumn = styled.div`
   flex-basis: 248px;
+
+  @media (${QUERIES.tabletAndDown}) {
+    flex-basis: auto;
+    margin-top: 16px;
+    margin-bottom: -12px;
+  }
 `;
 
 const MainColumn = styled.div`
@@ -61,6 +78,10 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+
+  @media ${QUERIES.tabletAndDown} {
+    align-items: flex-start;
+  }
 `;
 
 const Title = styled.h2`
